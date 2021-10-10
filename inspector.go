@@ -67,6 +67,11 @@ func (inspector Inspector) runTest(test Test) (Result, error) {
 		return Result{}, err
 	}
 
+	//add authorization header
+	if inspector.auth != "" {
+		req.Header.Add("Authorization", inspector.auth)
+	}
+
 	// Get response
 	resp, err := inspector.client.Do(req)
 	if err != nil {
