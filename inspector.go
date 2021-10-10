@@ -102,7 +102,6 @@ func (inspector Inspector) Test(tests Tests) (results Results, errors []error) {
 
 	var wg sync.WaitGroup
 
-	// TODO: Make number of goroutines configurable
 	for i := 1; i <= inspector.workerThreads; i++ {
 		// send workers to process tests
 		go inspector.worker(&wg, testsChan, resultsChan, errorChan)
