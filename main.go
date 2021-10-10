@@ -28,6 +28,7 @@ func main() {
 	var secure = flag.Bool("secure", false, "Secure connection.")
 	var timeout = flag.Int("timeout", 5, "Timeout for client.")
 	var auth = flag.String("auth", "", "Authorization string.")
+	var workerThreads = flag.Int("threads", 4, "Number of worker goroutines")
 
 	// parse flags and get args
 	flag.Parse()
@@ -64,7 +65,7 @@ func main() {
 	client := HTTPClient(*secure, *timeout)
 
 	// create a new inspector object
-	inspector := NewInspector(client, baseURL, *auth)
+	inspector := NewInspector(client, baseURL, *auth, *workerThreads)
 
 	// set timer for pretty-printing at display
 	testStart := time.Now()

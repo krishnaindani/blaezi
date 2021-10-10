@@ -24,13 +24,14 @@ import (
 )
 
 type Inspector struct {
-	client  Client
-	baseURL *url.URL
-	auth    string
+	client        Client
+	baseURL       *url.URL
+	auth          string
+	workerThreads int
 }
 
-func NewInspector(client Client, baseURL *url.URL, auth string) Inspector {
-	return Inspector{client: client, baseURL: baseURL, auth: auth}
+func NewInspector(client Client, baseURL *url.URL, auth string, workerThreads int) Inspector {
+	return Inspector{client: client, baseURL: baseURL, auth: auth, workerThreads: workerThreads}
 }
 
 type Tests []Test
@@ -101,8 +102,7 @@ func (inspector Inspector) Test(tests Tests) (results Results, errors []error) {
 
 	var wg sync.WaitGroup
 
-	// TODO: Make number of goroutines configurable
-	for i := 1; i <= 4; i++ {
+	for i := 1; i <= inspector.workerThreads; i++ {
 		// send workers to process tests
 		go inspector.worker(&wg, testsChan, resultsChan, errorChan)
 	}
